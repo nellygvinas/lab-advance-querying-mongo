@@ -16,20 +16,28 @@ db.companies.find({$and: [{founded_year: {$gte : 2000 }}, {founded_year: {$lte :
 
 ### 4. All the companies that had a Valuation Amount of more than 100.000.000 and have been founded before 2010. Retrieve only the `name` and `ipo` fields.
 
-<!-- Your Code Goes Here -->
-db.companies.find({$and: [{founded_year: {$lt: 2010}},{total_money_raised: {$ }} ] },{name:1, ipo:1, _id:0})
+db.companies.find({$and: [{founded_year: {$lt: 2010}},{"ipo.valuation_amount": {$gt : 100000000}} ] },{name:1, ipo:1, _id:0}).pretty()
+
 
 ### 5. All the companies that have less than 1000 employees and have been founded before 2005. Order them by the number of employees and limit the search to 10 companies.
 
-<!-- Your Code Goes Here -->
+db.companies.find({$and: [{founded_year: {$lt: 2005}},{number_of_employees: {$lt : 1000}} ] },{name:1, number_of_employees:1, founded_year: 1, _id:0}).sort( { number_of_employees: 1 }).limit(10).pretty()
 
 ### 6. All the companies that don't include the `partners` field.
 
-<!-- Your Code Goes Here -->
+
+db.companies.find( { partners: { $exists: false } },{name:1, _id:0})
+
+<!-- FIND NUMBER OF RESULTS:
+db.companies.find( { partners: { $exists: false } },{name:1, _id:0}).explain("executionStats").executionStats.nReturned; -->
+
 
 ### 7. All the companies that have a null type of value on the `category_code` field.
 
 <!-- Your Code Goes Here -->
+
+db.companies.find( {category_code: null},{name:1, category_code: 1, _id:0})
+
 
 ### 8. All the companies that have at least 100 employees but less than 1000. Retrieve only the `name` and `number of employees` fields.
 
